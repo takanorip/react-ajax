@@ -13,7 +13,7 @@ injectTapEventPlugin();
 class App extends Component {
 
   render() {
-    return ();
+    return (<div>Hello</div>);
   }
 }
 
