@@ -1,20 +1,39 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import axios from 'axios';
 
-import styles from './App.css';
+class FetchDemo extends React.Component {
+  constructor(props) {
+    super(props);
 
-injectTapEventPlugin();
+    this.state = {
+      posts: []
+    };
+  }
 
-class App extends Component {
+  componentDidMount() {
+    axios.get(`http://www.reddit.com/r/${this.props.subreddit}.json`)
+      .then(res => {
+        const posts = res.data.data.children.map(obj => obj.data);
+        this.setState({ posts });
+      });
+  }
 
   render() {
-    return (<div>Hello</div>);
+    return (
+      <div>
+        <h1>{`/r/${this.props.subreddit}`}</h1>
+        <ul>
+          {this.state.posts.map(post =>
+            <li key={post.id}>{post.title}</li>
+          )}
+        </ul>
+      </div>
+    );
   }
 }
 
-render(<App />, document.getElementById('app'));
+ReactDOM.render(
+  <FetchDemo subreddit="reactjs"/>,
+  document.getElementById('app')
+);
