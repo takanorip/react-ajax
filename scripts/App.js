@@ -2,30 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+import styles from './App.css';
+
 class FetchDemo extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      posts: []
+      cats: []
     };
   }
 
   componentDidMount() {
-    axios.get(`http://www.reddit.com/r/${this.props.subreddit}.json`)
+    axios.get(`/cats.json`)
       .then(res => {
-        const posts = res.data.data.children.map(obj => obj.data);
-        this.setState({ posts });
+        this.setState({ cats: res.data });
       });
   }
 
   render() {
     return (
-      <div>
-        <h1>{`/r/${this.props.subreddit}`}</h1>
-        <ul>
-          {this.state.posts.map(post =>
-            <li key={post.id}>{post.title}</li>
+      <div className="main">
+        <h1>CATS</h1>
+        <ul className="cat_pics">
+          {this.state.cats.map(cat =>
+            <li key={cat.id} className="cat_pic"><img src={cat.nekoImage} /></li>
           )}
         </ul>
       </div>
